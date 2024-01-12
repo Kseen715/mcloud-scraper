@@ -10,6 +10,11 @@ links from the internet for further investigation.
 
 ## Usage
 
+To install necessary requirements, run:
+```
+python3 pip install -r requirements.txt
+```
+
 You can use ```run.py``` or full command to config and run the scraper:
 ```
 python3 run.py -w <num of workers>
