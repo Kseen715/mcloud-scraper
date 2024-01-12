@@ -4,6 +4,7 @@ import aiohttp
 import asyncio
 import colorama
 import argparse
+import os
 
 mcloud_alph = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
@@ -64,5 +65,7 @@ if __name__ == "__main__":
         num_workers = args.workers
     else:
         num_workers = 1  # Change this to the number of workers you want
+
+    os.system('cls' if os.name == 'nt' else 'clear')
 
     asyncio.run(run_all_workers(num_workers))
