@@ -1,4 +1,3 @@
-# https://cloud.mail.ru/public/<xxxx>/<xxxxxxxxx>
 import random
 import aiohttp
 import asyncio
@@ -8,8 +7,9 @@ import os
 import time
 
 o_filename = 'output.txt'
-mcloud_alph = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+cloud_mail_mirror = 'https://cloud.mail.ru/public/'
 
+mcloud_alph = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 counter = 0
 success = 0
 speed_meter = 0
@@ -21,7 +21,7 @@ avg_speed_sum = 0
 
 async def get_rnd_public_folder():
     global mcloud_alph
-    return 'https://cloud.mail.ru/public/' \
+    return cloud_mail_mirror\
         + ''.join(random.choice(mcloud_alph) for _ in range(4)) + '/' \
         + ''.join(random.choice(mcloud_alph) for _ in range(9))
 
@@ -42,7 +42,8 @@ def append_to_file(text):
 
 
 async def main(worker_id):
-    global counter, success, speed_meter, speed, start_time, avg_speed, avg_speed_sum
+    global counter, success, speed_meter, speed, start_time, \
+        avg_speed, avg_speed_sum
     while (1):
         try:
             url = await get_rnd_public_folder()
@@ -76,7 +77,8 @@ async def main(worker_id):
                   + 'urls/s\t\t' + colorama.Fore.RESET, end='\r')
         except Exception as e:
             print('[' + colorama.Fore.RED + 'ERROR' +
-                  colorama.Fore.RESET + '] ' + str(e) + ' at ' + url)
+                  colorama.Fore.RESET + '] ' + str(e) + ' at ' + url
+                  + ', worker #' + str(worker_id))
 
 
 async def run_all_workers(num_workers):
@@ -109,7 +111,9 @@ if __name__ == "__main__":
 
     parser.add_argument("-w", "--workers", help="Number of workers", type=int)
     parser.add_argument(
-        "-c", "--check", help="Check gathered links. May be provided with file using -o flag", action="store_true")
+        "-c", "--check",
+        help="Check gathered links. May be provided with file using -o flag",
+        action="store_true")
     parser.add_argument(
         "-o", "--output", help="Output filename", type=str)
     args = parser.parse_args()
