@@ -3,6 +3,7 @@ import random
 import aiohttp
 import asyncio
 import colorama
+import argparse
 
 mcloud_alph = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
@@ -26,22 +27,42 @@ def append_to_file(text):
         file_object.write(text + '\n')
 
 
-async def main():
-    counter = 0
-    success = 0
+counter = 0
+success = 0
+
+
+async def main(worker_id):
+    global counter, success
     while (1):
-        url = await get_rnd_public_folder()
-        is_available = await check_availability(url)
-        if is_available:
-            append_to_file(url)
-            success += 1
-        counter += 1
-        print('Checked: ' + colorama.Fore.RED + str(counter)
-              + colorama.Fore.RESET + ' | Success: '
-              + colorama.Fore.GREEN + str(success) + colorama.Fore.RESET
-              + ' | URL: ' + colorama.Fore.LIGHTBLACK_EX + url + colorama.Fore.RESET, end='\r')
+        try:
+            url = await get_rnd_public_folder()
+            is_available = await check_availability(url)
+            if is_available:
+                append_to_file(url)
+                success += 1
+                print(colorama.Fore.GREEN + 'CORRECT: '
+                      + colorama.Fore.RESET + url + ', logging...')
+            counter += 1
+            print('Checked: ' + colorama.Fore.RED + str(counter)
+                  + colorama.Fore.RESET + ' | Success: '
+                  + colorama.Fore.GREEN + str(success) + colorama.Fore.RESET
+                  + ' | URL: ' + colorama.Fore.LIGHTBLACK_EX + url + colorama.Fore.RESET, end='\r')
+        except Exception as e:
+            pass
 
 
-# Run the main function
+async def run_all_workers(num_workers):
+    print(colorama.Fore.CYAN + 'Starting ' + str(num_workers)
+          + ' workers...' + colorama.Fore.RESET)
+    await asyncio.gather(*(main(i) for i in range(num_workers)))
+
 if __name__ == "__main__":
-    asyncio.run(main())
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-w", "--workers", help="Number of workers", type=int)
+    args = parser.parse_args()
+    if args.workers:
+        num_workers = args.workers
+    else:
+        num_workers = 1  # Change this to the number of workers you want
+
+    asyncio.run(run_all_workers(num_workers))
