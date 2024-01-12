@@ -10,7 +10,9 @@ mcloud_alph = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
 
 async def get_rnd_public_folder():
-    return 'https://cloud.mail.ru/public/' + ''.join(random.choice(mcloud_alph) for _ in range(4)) + '/' + ''.join(random.choice(mcloud_alph) for _ in range(9))
+    return 'https://cloud.mail.ru/public/'
++ ''.join(random.choice(mcloud_alph) for _ in range(4)) + '/'
++ ''.join(random.choice(mcloud_alph) for _ in range(9))
 
 
 async def check_availability(url):
@@ -42,19 +44,23 @@ async def main(worker_id):
                 append_to_file(url)
                 success += 1
                 print('[' + colorama.Fore.GREEN + 'CORRECT'
-                      + colorama.Fore.RESET + ']: ' + url + ', logging...')
+                      + colorama.Fore.RESET + '] ' + url + ', logging...')
             counter += 1
-            print('Checked: ' + colorama.Fore.RED + str(counter)
+            print('[' + colorama.Fore.CYAN + 'INFO' + colorama.Fore.RESET + '] '
+                  + 'Checked: ' + colorama.Fore.RED + str(counter)
                   + colorama.Fore.RESET + ' | Success: '
                   + colorama.Fore.GREEN + str(success) + colorama.Fore.RESET
-                  + ' | URL: ' + colorama.Fore.LIGHTBLACK_EX + url + colorama.Fore.RESET, end='\r')
+                  + ' | URL: ' + colorama.Fore.LIGHTBLACK_EX + url
+                  + colorama.Fore.RESET, end='\r')
         except Exception as e:
-            pass
+            print('[' + colorama.Fore.RED + 'ERROR' +
+                  colorama.Fore.RESET + '] ' + str(e))
 
 
 async def run_all_workers(num_workers):
-    print(colorama.Fore.CYAN + 'Starting ' + str(num_workers)
-          + ' workers...' + colorama.Fore.RESET)
+    print('[' + colorama.Fore.CYAN + 'INFO' + colorama.Fore.RESET + '] '
+          + 'Starting ' + str(num_workers)
+          + ' workers...')
     await asyncio.gather(*(main(i) for i in range(num_workers)))
 
 if __name__ == "__main__":
