@@ -10,6 +10,8 @@ links from the internet for further investigation.
 
 ## Usage
 
+Script written for Python 3.12, but should work on other versions.
+
 To install necessary requirements, run:
 ```
 python3 pip install -r requirements.txt
