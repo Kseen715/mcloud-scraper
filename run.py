@@ -40,8 +40,8 @@ async def main(worker_id):
             if is_available:
                 append_to_file(url)
                 success += 1
-                print(colorama.Fore.GREEN + 'CORRECT: '
-                      + colorama.Fore.RESET + url + ', logging...')
+                print('[' + colorama.Fore.GREEN + 'CORRECT'
+                      + colorama.Fore.RESET + ']: ' + url + ', logging...')
             counter += 1
             print('Checked: ' + colorama.Fore.RED + str(counter)
                   + colorama.Fore.RESET + ' | Success: '
