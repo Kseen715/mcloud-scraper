@@ -44,7 +44,7 @@ python3 run.py -sw 10
 
 Run extractor, to receive sequential if of the link:
 ```
-python3 run.py -e [text](https://cloud.mail.ru/public/ceY5/Sy9n2TNCa)
+python3 run.py -e https://cloud.mail.ru/public/ceY5/Sy9n2TNCa
 ```
 
 Run checker, to check if links is valid:
