@@ -34,7 +34,7 @@ increase this number. Also, you can use sequential mode, which is much slower,
 but more accurate.
 
 **Theoretically, random mode should have greater chance of collision with
-working link (_links use some kind of hash function to generate id_), so
+working link (_links use some kind of hash function to generate ID_), so
 I would recommend to use default mode.**
 
 My machine can work at speed ~120url/s and it requires ~50Mb/s of internet
@@ -53,7 +53,7 @@ Run 10 workers and use sequential mode (aka brute-force):
 python3 run.py -sw 10
 ```
 
-Run extractor, to receive sequential if of the link:
+Run extractor, to receive sequential ID of the link:
 ```
 python3 run.py -e https://cloud.mail.ru/public/ceY5/Sy9n2TNCa
 ```
