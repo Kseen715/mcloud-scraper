@@ -89,9 +89,17 @@ def append_to_file(text):
         file_object.write(text + '\n')
 
 
+async def save_state_on_time():
+    while (1):
+        await asyncio.sleep(10)
+        save_state()
+
+
 async def main(worker_id):
     global counter, success, speed_meter, speed, start_time, \
         avg_speed, avg_speed_sum
+    task = asyncio.create_task(save_state_on_time())
+
     while (1):
         try:
             if mode == 0:
@@ -168,6 +176,7 @@ async def try_gathered():
             except Exception as e:
                 print('[' + colorama.Fore.YELLOW + 'WARNING' +
                       colorama.Fore.RESET + '] ' + str(e))
+
 
 if __name__ == "__main__":
     try:
