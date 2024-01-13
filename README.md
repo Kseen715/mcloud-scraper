@@ -17,7 +17,39 @@ To install necessary requirements, run:
 python3 pip install -r requirements.txt
 ```
 
-You can use ```run.py``` or full command to config and run the scraper:
+You can use ```--help``` argument to see full command palette:
 ```
-python3 run.py -w <num of workers>
+python3 run.py --help
 ```
+
+On my machine, I can run 20 workers without any problems, but you can try to
+increase this number. Also, you can use sequential mode, which is much slower,
+but more accurate.
+
+My machine can work at speed ~120url/s and it requires ~50Mb/s of internet
+connection. Sequential mode requires ~70*10^12 years to check all possible
+combinations.
+
+## Examples
+
+Run 20 workers and save output to ```output.txt``` file:
+```
+python3 run.py -w 20 -o output.txt
+```
+
+Run 10 workers and use sequential mode (aka brute-force):
+```
+python3 run.py -sw 10
+```
+
+Run extractor, to receive sequential if of the link:
+```
+python3 run.py -e [text](https://cloud.mail.ru/public/ceY5/Sy9n2TNCa)
+```
+
+Run checker, to check if links is valid:
+```
+python3 run.py -c -o output.txt
+```
+
+

@@ -107,6 +107,16 @@ async def save_state_on_time():
         save_state()
 
 
+def calculate_remaining_time(avg_speed_avg):
+    global seq_client
+    remaining = 0
+    # permutation of 13 chars from 62 chars
+    max_count = 62 ** 13
+    if avg_speed_avg > 0:
+        remaining = (max_count - seq_client) / avg_speed_avg
+    return remaining
+
+
 async def main(worker_id):
     global counter, success, speed_meter, speed, start_time, \
         avg_speed, avg_speed_sum, seq_success
@@ -144,7 +154,8 @@ async def main(worker_id):
             avg_speed_avg = avg_speed_sum / \
                 len(avg_speed) if len(avg_speed) > 0 else 0
             avg_speed_avg = round(avg_speed_avg, 1)
-
+            rmt = calculate_remaining_time(avg_speed_avg)
+            rmt = rmt if rmt > 0 else 0
             print('[' + colorama.Fore.CYAN + 'INFO' + colorama.Fore.RESET + '] '
                   + (('Checked: ' + colorama.Fore.RED + str(counter)
                       + colorama.Fore.RESET)
@@ -160,7 +171,32 @@ async def main(worker_id):
                   + colorama.Fore.RESET
                   + ' | Speed: '
                   + colorama.Fore.LIGHTBLUE_EX + str(avg_speed_avg)
-                  + 'url/s\t\t' + colorama.Fore.RESET, end='\r')
+                  + 'url/s' + colorama.Fore.RESET
+                  + (' | RMT: '
+                     + colorama.Fore.LIGHTBLUE_EX
+                     + str(
+                         # years
+                         (((str(int((((rmt / 60) / 60) / 24) / 365))) + 'y')
+                          if rmt > 31536000 else '')
+                     )
+                      + str(
+                         # days
+                         (((str(int((((rmt / 60) / 60) / 24) % 365))) + 'd')
+                          if rmt > 86400 else '')
+                     )
+                      + str(
+                         (((str(int(((rmt / 60) / 60) % 24))) + 'h')
+                          if rmt > 3600 else '')
+                     )
+                      + str(
+                         (((str(int(((rmt / 60) % 60)))) + 'm') if rmt > 60 else '')
+                     )
+                      + str(
+                         (((str(int((rmt % 60)))) + 's') if rmt > 0 else '')
+                     )
+                      + colorama.Fore.RESET
+                     if mode == 1 else '')
+                  + ' '*20, end='\r')
         except Exception as e:
             print('[' + colorama.Fore.YELLOW + 'WARNING' +
                   colorama.Fore.RESET + '] ' + str(e) + ' at ' + url
