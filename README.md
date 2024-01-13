@@ -33,7 +33,8 @@ On my machine, I can run 20 workers without any problems, but you can try to
 increase this number. Also, you can use sequential mode, which is much slower,
 but more accurate.
 
-**Theoretically, random mode should have greater chance of collision, so
+**Theoretically, random mode should have greater chance of collision with
+working link (_links use some kind of hash function to generate id_), so
 I would recommend to use default mode.**
 
 My machine can work at speed ~120url/s and it requires ~50Mb/s of internet
