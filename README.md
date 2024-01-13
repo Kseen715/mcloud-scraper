@@ -38,7 +38,7 @@ working link (_links use some kind of hash function to generate ID_), so
 I would recommend to use default mode.**
 
 My machine can work at speed ~120url/s and it requires ~50Mb/s of internet
-connection. Sequential mode requires ~70*10^12 years to check all possible
+connection. Sequential mode requires ~7*10^13 years to check all possible
 combinations.
 
 ## Examples
