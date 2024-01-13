@@ -30,10 +30,10 @@ seq_success = 0
 def save_state():
     global counter, success, seq_client, seq_success
     state = {
-        'counter': counter,
-        'success': success,
-        'seq_client': seq_client,
-        'seq_success': seq_success,
+        'counter': str(counter),
+        'success': str(success),
+        'seq_client': str(seq_client),
+        'seq_success': str(seq_success),
     }
     with open(state_filename, 'w') as outfile:
         json.dump(state, outfile)
@@ -43,10 +43,10 @@ def load_state():
     global counter, success, seq_client, seq_success
     with open(state_filename) as json_file:
         data = json.load(json_file)
-        counter = data['counter']
-        success = data['success']
-        seq_client = data['seq_client']
-        seq_success = data['seq_success']
+        counter = int(data['counter'])
+        success = int(data['success'])
+        seq_client = int(data['seq_client'])
+        seq_success = int(data['seq_success'])
 
 
 async def get_rnd_public_folder():
@@ -68,10 +68,22 @@ def get_combination(alphabet, number, length):
 async def get_seq_public_folder():
     global mcloud_alph, seq_client, cloud_mail_mirror
     seq_client += 1
-    if seq_client > 473838133832161:
-        seq_client = 0
     seq = get_combination(mcloud_alph, seq_client, 13)
     return cloud_mail_mirror + seq[0:4] + '/' + seq[4:13]
+
+
+def get_number_from_link(link):
+    global cloud_mail_mirror, mcloud_alph
+    seq = link.replace(cloud_mail_mirror, '').replace('/', '')
+    seq = seq[::-1]  # reverse the sequence
+    number = 0
+    for char in seq:
+        number = number * len(mcloud_alph) + mcloud_alph.index(char)
+    print('[' + colorama.Fore.CYAN + 'INFO' + colorama.Fore.RESET + '] '
+          + 'URL: ' + colorama.Fore.LIGHTBLACK_EX + link
+            + colorama.Fore.RESET + ' | Seq: '
+            + colorama.Fore.LIGHTBLUE_EX + str(number)
+            + colorama.Fore.RESET)
 
 
 async def check_availability(url):
@@ -97,7 +109,7 @@ async def save_state_on_time():
 
 async def main(worker_id):
     global counter, success, speed_meter, speed, start_time, \
-        avg_speed, avg_speed_sum
+        avg_speed, avg_speed_sum, seq_success
     task = asyncio.create_task(save_state_on_time())
 
     while (1):
@@ -113,7 +125,10 @@ async def main(worker_id):
             is_available = await check_availability(url)
             if is_available:
                 append_to_file(url)
-                success += 1
+                if mode == 0:
+                    success += 1
+                elif mode == 1:
+                    seq_success += 1
                 print('[' + colorama.Fore.GREEN + 'CORRECT'
                       + colorama.Fore.RESET + '] ' + url + ', logging...')
             speed_meter += 1
@@ -192,6 +207,9 @@ if __name__ == "__main__":
             "-o", "--output", help="Output filename", type=str)
         parser.add_argument(
             "-s", "--sequential", help="Sequential mode", action="store_true")
+        parser.add_argument(
+            "-e", "--extract", help="Extract sequential number from link",
+            type=str)
         args = parser.parse_args()
 
         if args.output:
@@ -201,6 +219,10 @@ if __name__ == "__main__":
             num_workers = args.workers
         else:
             num_workers = 1  # Change this to the number of workers you want
+
+        if args.extract:
+            get_number_from_link(args.extract)
+            exit()
 
         os.system('cls' if os.name == 'nt' else 'clear')
 
@@ -223,7 +245,8 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         save_state()
         print('\n[' + colorama.Fore.YELLOW + 'WARNING' +
-              colorama.Fore.RESET + '] ' + 'KeyboardInterrupt, saving current state...')
+              colorama.Fore.RESET + '] '
+              + 'KeyboardInterrupt, saving current state...')
         exit()
 
     except Exception as e:
