@@ -8,6 +8,13 @@
 This is proof-of-concept project, that theoretically should "mine" public cloud 
 links from the internet for further investigation.
 
+Script will try to find all possible combinations of the link and check if it
+is valid. If link is valid, it will be saved to the output file.
+
+Current state of the process will be displayed in the console and 
+saved to the state file. If you want to stop the process, just press ```Ctrl+C```
+and wait for the process to stop.
+
 ## Usage
 
 Script written for Python 3.12, but should work on other versions.
