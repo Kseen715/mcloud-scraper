@@ -15,6 +15,10 @@ Current state of the process will be displayed in the console and
 saved to the state file. If you want to stop the process, just press ```Ctrl+C```
 and wait for the process to stop.
 
+<p align="center">
+  <img src="https://github.com/Kseen715/imgs/blob/main/mcloud-scraper/anim0001.gif?raw=true" />
+</p>
+
 ## Usage
 
 Script written for Python 3.12, but should work on other versions.
